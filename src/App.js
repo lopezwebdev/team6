@@ -4,26 +4,45 @@ import { OAI_KEY } from './secrets';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import hotel1 from "./hotel1.jpg"
+import hotel2 from "./hotel2.jpg"
 
 const hoteldata = [
   {
     image: hotel1,
     title: "asd",
-    price: 0
+    price: 0,
+    url: "https://travel.rakuten.co.jp/HOTEL/18350/18350.html"
   },
   {
-    image: hotel1,
+    image: hotel2,
     title: "asd",
-    price: 1
+    price: 1,
+    url: "https://travel.rakuten.co.jp/HOTEL/20068/20068.html"
+  }
+]
+
+
+const msgs = [
+  {
+    content: "Sure, here are hotels in Miura. Do you like it?",
+    data: hoteldata,
+    role: "system"
+  },
+  {
+    content: "Sure! I'll proceed with booking.",
+    role: "system",
+    data: null
   }
 ]
 
 function App() {
   const [messages, setMessages] = useState([
-    { role: "system", content: "You are a helpful assistant." }
+    { role: "system", content: "Hi! Where would you like to go?" }
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [msgCounter, setMsgCounter] = useState(0)
 
   const callOpenAI = async (newMessages) => {
     try {
@@ -52,19 +71,13 @@ function App() {
     setInput("");
     setLoading(true);
 
-    const botMessage = await callOpenAI(newMessages);
-    if (botMessage) {
-      if (botMessage.content.includes("[carousel]")) {
-        const images = [
-          { src: "https://source.unsplash.com/400x300/?nature", title: "Nature" },
-          { src: "https://source.unsplash.com/400x300/?city", title: "City" },
-          { src: "https://source.unsplash.com/400x300/?ocean", title: "Ocean" },
-        ];
-        setMessages([...newMessages, { role: "assistant", content: "Here are some images:", images }]);
-      } else {
-        setMessages([...newMessages, botMessage]);
-      }
-    }
+    // const botMessage = await callOpenAI(newMessages);
+    // if (botMessage) {
+    setMessages([...newMessages, msgs[msgCounter]]);
+    setMsgCounter(msgCounter + 1)
+    // }
+
+
     setLoading(false);
   };
 
@@ -88,14 +101,16 @@ function App() {
                 {msg.content}
               </div>
               <div>
-                <Carousel showThumbs={true} infiniteLoop autoPlay>
-                  {hoteldata.map((img, idx) => (
-                    <div key={idx}>
-                      <img src={img.image} alt={img.title} width="100px" />
-                      <p className="legend">{img.title}</p>
-                    </div>
-                  ))}
-                </Carousel>
+                {msg.data != null &&
+                  <Carousel showThumbs={true} infiniteLoop autoPlay>
+                    {msg.data.map((img, idx) => (
+                      <div key={idx}>
+                        <img src={img.image} alt={img.title} width="100px" />
+                        <p className="legend">{img.title}</p>
+                      </div>
+                    ))}
+                  </Carousel>
+                }
               </div>
             </div>
           ))}
