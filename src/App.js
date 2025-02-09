@@ -1,6 +1,22 @@
 import React, { useState } from 'react';
 import { OpenAI } from "openai";
 import { OAI_KEY } from './secrets';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import hotel1 from "./hotel1.jpg"
+
+const hoteldata = [
+  {
+    image: hotel1,
+    title: "asd",
+    price: 0
+  },
+  {
+    image: hotel1,
+    title: "asd",
+    price: 1
+  }
+]
 
 function App() {
   const [messages, setMessages] = useState([
@@ -38,14 +54,23 @@ function App() {
 
     const botMessage = await callOpenAI(newMessages);
     if (botMessage) {
-      setMessages([...newMessages, botMessage]);
+      if (botMessage.content.includes("[carousel]")) {
+        const images = [
+          { src: "https://source.unsplash.com/400x300/?nature", title: "Nature" },
+          { src: "https://source.unsplash.com/400x300/?city", title: "City" },
+          { src: "https://source.unsplash.com/400x300/?ocean", title: "Ocean" },
+        ];
+        setMessages([...newMessages, { role: "assistant", content: "Here are some images:", images }]);
+      } else {
+        setMessages([...newMessages, botMessage]);
+      }
     }
     setLoading(false);
   };
 
   return (
     <div className="flex h-screen bg-gray-900 text-white p-0">
-      <div className="w-4/5 h-full">
+      <div className="w-3/5 h-full">
         <iframe
           title="asd"
           src="https://travel.rakuten.co.jp/"
@@ -59,7 +84,19 @@ function App() {
               key={index}
               className={`p-3 max-w-xs md:max-w-md lg:max-w-lg rounded-lg ${msg.role === "user" ? "bg-blue-500 ml-auto" : "bg-gray-700 mr-auto"}`}
             >
-              {msg.content}
+              <div>
+                {msg.content}
+              </div>
+              <div>
+                <Carousel showThumbs={true} infiniteLoop autoPlay>
+                  {hoteldata.map((img, idx) => (
+                    <div key={idx}>
+                      <img src={img.image} alt={img.title} width="100px" />
+                      <p className="legend">{img.title}</p>
+                    </div>
+                  ))}
+                </Carousel>
+              </div>
             </div>
           ))}
         </div>
@@ -80,7 +117,6 @@ function App() {
           </button>
         </div>
       </div>
-
     </div>
   );
 }
