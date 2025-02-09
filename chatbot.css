@@ -1,0 +1,93 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f7f6;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Chatbox Container */
+#chat-box {
+  width: 400px;
+  height: 500px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow-y: auto;
+}
+
+/* Chat Messages */
+#chat-box p {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 80%;
+}
+
+/* User's Messages */
+#chat-box .user-message {
+  background-color: #e1ffc7;
+  align-self: flex-end;
+  text-align: right;
+}
+
+/* Bot's Messages */
+#chat-box .bot-message {
+  background-color: #f0f0f0;
+  align-self: flex-start;
+  text-align: left;
+}
+
+/* Input Area */
+input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  outline: none;
+}
+
+input[type="text"]:focus {
+  border-color: #0078d4;
+}
+
+/* Send Button */
+#send-btn {
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+#send-btn:hover {
+  background-color: #005fa3;
+}
+
+#send-btn:active {
+  background-color: #00477a;
+}
+
+/* Links inside the chat */
+a {
+  color: #0078d4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
