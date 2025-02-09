@@ -9,18 +9,21 @@ import hotel2 from "./hotel2.jpg"
 const hoteldata = [
   {
     image: hotel1,
-    title: "asd",
+    title: "Hotel 1",
     price: 0,
     url: "https://travel.rakuten.co.jp/HOTEL/18350/18350.html"
   },
   {
     image: hotel2,
-    title: "asd",
+    title: "Hotel 2",
     price: 1,
     url: "https://travel.rakuten.co.jp/HOTEL/20068/20068.html"
   }
-]
+];
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 const msgs = [
   {
@@ -33,7 +36,7 @@ const msgs = [
     role: "system",
     data: null
   }
-]
+];
 
 function App() {
   const [messages, setMessages] = useState([
@@ -41,8 +44,8 @@ function App() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const [msgCounter, setMsgCounter] = useState(0)
+  const [msgCounter, setMsgCounter] = useState(0);
+  const [iframeSrc, setIframeSrc] = useState("https://travel.rakuten.co.jp/");
 
   const callOpenAI = async (newMessages) => {
     try {
@@ -70,13 +73,10 @@ function App() {
     setMessages(newMessages);
     setInput("");
     setLoading(true);
+    await sleep(1200)
 
-    // const botMessage = await callOpenAI(newMessages);
-    // if (botMessage) {
     setMessages([...newMessages, msgs[msgCounter]]);
-    setMsgCounter(msgCounter + 1)
-    // }
-
+    setMsgCounter(msgCounter + 1);
 
     setLoading(false);
   };
@@ -85,8 +85,8 @@ function App() {
     <div className="flex h-screen bg-gray-900 text-white p-0">
       <div className="w-3/5 h-full">
         <iframe
-          title="asd"
-          src="https://travel.rakuten.co.jp/"
+          title="Hotel Preview"
+          src={iframeSrc}
           className="w-full h-full border-none rounded-lg"
         ></iframe>
       </div>
@@ -95,22 +95,21 @@ function App() {
           {messages.map((msg, index) => (
             <div
               key={index}
-              className={`p-3 max-w-xs md:max-w-md lg:max-w-lg rounded-lg ${msg.role === "user" ? "bg-blue-500 ml-auto" : "bg-gray-700 mr-auto"}`}
+              className={`p-3 max-w-xs md:max-w-md lg:max-w-lg rounded-lg ${msg.role === "user" ? "bg-blue-500 ml-auto" : "bg-gray-700 mr-auto"
+                }`}
             >
+              <div>{msg.content}</div>
               <div>
-                {msg.content}
-              </div>
-              <div>
-                {msg.data != null &&
+                {msg.data != null && (
                   <Carousel showThumbs={true} infiniteLoop autoPlay>
                     {msg.data.map((img, idx) => (
-                      <div key={idx}>
+                      <div key={idx} onClick={() => setIframeSrc(img.url)} style={{ cursor: 'pointer' }}>
                         <img src={img.image} alt={img.title} width="100px" />
                         <p className="legend">{img.title}</p>
                       </div>
                     ))}
                   </Carousel>
-                }
+                )}
               </div>
             </div>
           ))}
