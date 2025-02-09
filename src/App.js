@@ -82,7 +82,7 @@ function App() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-900 text-white p-0">
+    <div className="flex h-screen text-white p-0">
       <div className="w-3/5 h-full">
         <iframe
           title="Hotel Preview"
@@ -114,13 +114,13 @@ function App() {
             </div>
           ))}
         </div>
-        <div className="flex items-center gap-2 p-2 bg-gray-800 rounded-lg shadow-md">
+        <div className="flex items-center gap-2 p-2 rounded-lg shadow-md">
           <input
             type="text"
-            className="flex-1 p-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 p-2 bg-gray-700/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Type a message..."
+            placeholder="Where you wanna go?"
           />
           <button
             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition disabled:bg-gray-500"
